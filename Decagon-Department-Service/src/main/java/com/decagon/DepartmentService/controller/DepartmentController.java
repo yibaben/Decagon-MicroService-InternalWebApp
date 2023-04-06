@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class DepartmentController {
 
     private DepartmentService departmentService;
-    private final DepartmentRepository departmentRepository;
 
     // Build Save Department REST API
     @PostMapping("save")

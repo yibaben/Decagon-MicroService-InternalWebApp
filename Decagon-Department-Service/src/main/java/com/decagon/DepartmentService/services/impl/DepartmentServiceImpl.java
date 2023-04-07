@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class DepartmentImpl implements DepartmentService {
+public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentRepository departmentRepository;
     @Override

@@ -2,12 +2,16 @@ package com.decagon.DepartmentService.services.impl;
 
 import com.decagon.DepartmentService.dto.DepartmentDto;
 import com.decagon.DepartmentService.entity.Department;
+import com.decagon.DepartmentService.exception.CodeNumAlreadyExistException;
+import com.decagon.DepartmentService.exception.ResourceNotFoundException;
 import com.decagon.DepartmentService.mapper.AutoMapper;
 import com.decagon.DepartmentService.repository.DepartmentRepository;
 import com.decagon.DepartmentService.services.DepartmentService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +22,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     private ModelMapper modelMapper;
     @Override
     public DepartmentDto saveDepartment(DepartmentDto departmentDto) {
+        Optional<Department> optionalDepartment = departmentRepository.findDepartmentByCode(departmentDto.getCode());
+        if (optionalDepartment.isPresent()){
+            throw new CodeNumAlreadyExistException("This Code_Num Already Exist");
+        }
 
         // Convert DepartmentDto into Department Jpa Entity and save in database
         // Using ModelMapper
@@ -33,16 +41,18 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentDto savedDepartmentDto = modelMapper.map(saveDepartment, DepartmentDto.class);
         return savedDepartmentDto;
 
-        // Convert Department JPA Entity to DepartmentDto Using MapStruct
+        //Convert Department JPA Entity to DepartmentDto Using MapStruct
         // return AutoMapper.MAPPER.mapToDepartmentDto(saveDepartment);
     }
 
     @Override
     public DepartmentDto getDepartmentByCode(String departmentCode) {
-        Department department = departmentRepository.findDepartmentByCode(departmentCode);
+        Department department = departmentRepository.findDepartmentByCode(departmentCode).orElseThrow(
+                () -> new ResourceNotFoundException("Department", "CodeNum", departmentCode)
+        );
 
         // Convert Department Jpa Entity to DepartmentDto Using ModelMapper
-         return modelMapper.map(department, DepartmentDto.class);
+        return modelMapper.map(department, DepartmentDto.class);
 
         // Convert Saved Department JPA Entity to DepartmentDto Using MapStruct
         // return AutoMapper.MAPPER.mapToDepartmentDto(department);

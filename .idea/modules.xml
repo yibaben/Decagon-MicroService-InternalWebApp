@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Decagon MicroService Application.iml" filepath="$PROJECT_DIR$/.idea/Decagon MicroService Application.iml" />
       <module fileurl="file://$PROJECT_DIR$/Decagon-Department-Service/Decagon-Department-Service.iml" filepath="$PROJECT_DIR$/Decagon-Department-Service/Decagon-Department-Service.iml" />
       <module fileurl="file://$PROJECT_DIR$/Decagon-Employee-Service/Decagon-Employee-Service.iml" filepath="$PROJECT_DIR$/Decagon-Employee-Service/Decagon-Employee-Service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Service-Registry/Service-Registry.iml" filepath="$PROJECT_DIR$/Service-Registry/Service-Registry.iml" />
     </modules>
   </component>
 </project>

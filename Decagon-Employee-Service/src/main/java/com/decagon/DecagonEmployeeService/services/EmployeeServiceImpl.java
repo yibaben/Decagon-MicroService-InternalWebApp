@@ -24,7 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     private EmployeeRepository employeeRepository;
     private ModelMapper modelMapper;
     // private RestTemplate restTemplate;
-    private WebClient webClient;
+    // private WebClient webClient;
+    private APIClient apiClient;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -66,13 +67,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 //                DepartmentDto.class);
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
-        // REST API Call Using WebClient
-        DepartmentDto departmentDto = webClient.get()
-                .uri("http://localhost:8080/api/department/get/"
-                + employee.getDepartmentCode())
-                .retrieve()
-                .bodyToMono(DepartmentDto.class)
-                .block();
+//         REST API Call Using WebClient
+//        DepartmentDto departmentDto = webClient.get()
+//                .uri("http://localhost:8080/api/department/get/"
+//                + employee.getDepartmentCode())
+//                .retrieve()
+//                .bodyToMono(DepartmentDto.class)
+//                .block();
+
+        // REST API Call Using Spring Cloud OpenFeign
+        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
         // Convert Employee Jpa Entity to EmployeeDto Using ModelMapper
         EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);

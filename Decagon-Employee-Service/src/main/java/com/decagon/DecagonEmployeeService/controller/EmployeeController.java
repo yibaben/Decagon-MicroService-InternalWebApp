@@ -1,5 +1,6 @@
 package com.decagon.DecagonEmployeeService.controller;
 
+import com.decagon.DecagonEmployeeService.dto.APIResponseDto;
 import com.decagon.DecagonEmployeeService.dto.EmployeeDto;
 import com.decagon.DecagonEmployeeService.services.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,8 @@ public class EmployeeController {
 
     // Build Get Employee REST API
     @GetMapping("get/{id}")
-    public ResponseEntity<EmployeeDto> getEmployee(@PathVariable Long id){
-        EmployeeDto employeeDto = employeeService.getEmployeeById(id);
-        return new ResponseEntity<>(employeeDto, HttpStatus.FOUND);
+    public ResponseEntity<APIResponseDto> getEmployee(@PathVariable Long id){
+        APIResponseDto apiResponseDto = employeeService.getEmployeeById(id);
+        return new ResponseEntity<>(apiResponseDto, HttpStatus.FOUND);
     }
 }

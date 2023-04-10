@@ -1,5 +1,7 @@
 package com.decagon.DecagonEmployeeService.services;
 
+import com.decagon.DecagonEmployeeService.dto.APIResponseDto;
+import com.decagon.DecagonEmployeeService.dto.DepartmentDto;
 import com.decagon.DecagonEmployeeService.dto.EmployeeDto;
 import com.decagon.DecagonEmployeeService.entity.Employee;
 import com.decagon.DecagonEmployeeService.exception.EmailAlreadyExistException;
@@ -8,7 +10,9 @@ import com.decagon.DecagonEmployeeService.mapper.AutoMapper;
 import com.decagon.DecagonEmployeeService.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -18,6 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     private EmployeeRepository employeeRepository;
     private ModelMapper modelMapper;
+    private RestTemplate restTemplate;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -47,14 +52,25 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public EmployeeDto getEmployeeById(Long employeeId) {
+    public APIResponseDto getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new ResourceNotFoundException("Employee", "Id", employeeId)
         );
 
+        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity(
+                "http://localhost:8080/api/department/get/"
+                + employee.getDepartmentCode(),
+                DepartmentDto.class);
+        DepartmentDto departmentDto = responseEntity.getBody();
 
         // Convert Employee Jpa Entity to EmployeeDto Using ModelMapper
-        return modelMapper.map(employee, EmployeeDto.class);
+        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+
+        APIResponseDto apiResponseDto = new APIResponseDto();
+        apiResponseDto.setEmployee(employeeDto);
+        apiResponseDto.setDepartment(departmentDto);
+
+        return apiResponseDto;
 
         // Convert Employee Jpa Entity to EmployeeDto Using MapStruct
         // return AutoMapper.MAPPER.mapToEmployeeDto(employee);

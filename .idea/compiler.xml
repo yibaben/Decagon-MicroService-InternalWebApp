@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Api-Gateway" />
         <module name="Service-Registry" />
       </profile>
       <profile name="Annotation profile for Decagon-Employee-Service" enabled="true">
@@ -24,6 +25,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Api-Gateway" target="17" />
       <module name="Decagon-Department-Service" target="17" />
       <module name="Decagon-Employee-Service" target="17" />
       <module name="Service-Registry" target="17" />
@@ -31,6 +33,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Api-Gateway" options="-parameters" />
       <module name="Decagon-Department-Service" options="-parameters" />
       <module name="Decagon-Employee-Service" options="-parameters" />
       <module name="Service-Registry" options="-parameters" />

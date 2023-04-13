@@ -1,0 +1,13 @@
+package com.decagon.DecagonOrganisationService;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DecagonOrganisationServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(DecagonOrganisationServiceApplication.class, args);
+	}
+
+}

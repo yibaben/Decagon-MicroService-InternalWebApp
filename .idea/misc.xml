@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/Service-Registry/pom.xml" />
         <option value="$PROJECT_DIR$/Api-Gateway/pom.xml" />
         <option value="$PROJECT_DIR$/Config-Server/pom.xml" />
+        <option value="$PROJECT_DIR$/Decagon-Organisation-Service/pom.xml" />
       </list>
     </option>
   </component>

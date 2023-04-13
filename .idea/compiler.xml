@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Api-Gateway" />
         <module name="Config-Server" />
+        <module name="Decagon-Organisation-Service" />
         <module name="Service-Registry" />
       </profile>
       <profile name="Annotation profile for Decagon-Employee-Service" enabled="true">
@@ -30,6 +31,7 @@
       <module name="Config-Server" target="17" />
       <module name="Decagon-Department-Service" target="17" />
       <module name="Decagon-Employee-Service" target="17" />
+      <module name="Decagon-Organisation-Service" target="17" />
       <module name="Service-Registry" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -39,6 +41,7 @@
       <module name="Config-Server" options="-parameters" />
       <module name="Decagon-Department-Service" options="-parameters" />
       <module name="Decagon-Employee-Service" options="-parameters" />
+      <module name="Decagon-Organisation-Service" options="-parameters" />
       <module name="Service-Registry" options="-parameters" />
     </option>
   </component>

@@ -8,6 +8,8 @@ import com.decagon.DecagonEmployeeService.exception.EmailAlreadyExistException;
 import com.decagon.DecagonEmployeeService.exception.ResourceNotFoundException;
 import com.decagon.DecagonEmployeeService.mapper.AutoMapper;
 import com.decagon.DecagonEmployeeService.repository.EmployeeRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     private EmployeeRepository employeeRepository;
     private ModelMapper modelMapper;
     // private RestTemplate restTemplate;
-    // private WebClient webClient;
+     private WebClient webClient;
     private APIClient apiClient;
 
     @Override
@@ -54,6 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         // return savedEmployeeDto;
     }
 
+   @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
@@ -68,15 +71,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
 //         REST API Call Using WebClient
-//        DepartmentDto departmentDto = webClient.get()
-//                .uri("http://localhost:8080/api/department/get/"
-//                + employee.getDepartmentCode())
-//                .retrieve()
-//                .bodyToMono(DepartmentDto.class)
-//                .block();
+        DepartmentDto departmentDto = webClient.get()
+                .uri("http://localhost:8180/api/department/get/"
+                + employee.getDepartmentCode())
+                .retrieve()
+                .bodyToMono(DepartmentDto.class)
+                .block();
 
         // REST API Call Using Spring Cloud OpenFeign
-        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+        // DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
         // Convert Employee Jpa Entity to EmployeeDto Using ModelMapper
         EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
@@ -85,6 +88,30 @@ public class EmployeeServiceImpl implements EmployeeService{
         apiResponseDto.setEmployee(employeeDto);
         apiResponseDto.setDepartment(departmentDto);
 
+        return apiResponseDto;
+
+        // Convert Employee Jpa Entity to EmployeeDto Using MapStruct
+        // return AutoMapper.MAPPER.mapToEmployeeDto(employee);
+
+    }
+
+    // Creating a FallBack Method for Circuit Breaker
+    public APIResponseDto getDefaultDepartment(Long employeeId, Exception exception) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee", "Id", employeeId)
+        );
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setName("R%D Department");
+        departmentDto.setCode("RD001");
+        departmentDto.setDescription("Research and Development Department");
+
+        // Convert Employee Jpa Entity to EmployeeDto Using ModelMapper
+        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+
+        APIResponseDto apiResponseDto = new APIResponseDto();
+        apiResponseDto.setEmployee(employeeDto);
+        apiResponseDto.setDepartment(departmentDto);
         return apiResponseDto;
 
         // Convert Employee Jpa Entity to EmployeeDto Using MapStruct

@@ -12,7 +12,7 @@
         <module name="Decagon-Organisation-Service" />
         <module name="Service-Registry" />
       </profile>
-      <profile name="Annotation profile for Decagon-Employee-Service" enabled="true">
+      <profile name="Annotation profile for Decagon-Department-Service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

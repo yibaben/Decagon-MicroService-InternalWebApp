@@ -26,4 +26,5 @@ public class Employee {
     @Column(nullable = false)
     private String password;
     private String departmentCode;
+    private String organisationCode;
 }

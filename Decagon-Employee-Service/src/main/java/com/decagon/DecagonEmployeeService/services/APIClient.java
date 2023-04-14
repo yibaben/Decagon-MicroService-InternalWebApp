@@ -1,6 +1,7 @@
 package com.decagon.DecagonEmployeeService.services;
 
 import com.decagon.DecagonEmployeeService.dto.DepartmentDto;
+import com.decagon.DecagonEmployeeService.dto.OrganisationDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,5 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface APIClient {
     @GetMapping("api/department/get/{code}")
     DepartmentDto getDepartment(@PathVariable("code") String departmentCode);
+
+    @GetMapping("api/organisation/get/{code}")
+    OrganisationDto getOrganisation(@PathVariable("code") String organisationCode);
 
 }

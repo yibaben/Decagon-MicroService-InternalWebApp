@@ -21,4 +21,11 @@ public class OrganisationServiceImpl implements OrganisationServices{
         // Convert Organisation JPA Entity to OrganisationDto and return to the client
         return OrganisationMapper.mapToOrganisationDto(saveOrganisation);
     }
+
+    @Override
+    public OrganisationDto getOrganisationByCode(String orgCodeNum) {
+        Organisation organisation = organisationRepository.findByOrgCodeNum(orgCodeNum);
+        // Convert Organisation JPA Entity to OrganisationDto and return to the client
+        return OrganisationMapper.mapToOrganisationDto(organisation);
+    }
 }

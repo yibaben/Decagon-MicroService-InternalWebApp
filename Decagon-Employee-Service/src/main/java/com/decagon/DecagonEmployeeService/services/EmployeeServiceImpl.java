@@ -3,10 +3,10 @@ package com.decagon.DecagonEmployeeService.services;
 import com.decagon.DecagonEmployeeService.dto.APIResponseDto;
 import com.decagon.DecagonEmployeeService.dto.DepartmentDto;
 import com.decagon.DecagonEmployeeService.dto.EmployeeDto;
+import com.decagon.DecagonEmployeeService.dto.OrganisationDto;
 import com.decagon.DecagonEmployeeService.entity.Employee;
 import com.decagon.DecagonEmployeeService.exception.EmailAlreadyExistException;
 import com.decagon.DecagonEmployeeService.exception.ResourceNotFoundException;
-import com.decagon.DecagonEmployeeService.mapper.AutoMapper;
 import com.decagon.DecagonEmployeeService.repository.EmployeeRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -78,8 +78,18 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .bodyToMono(DepartmentDto.class)
                 .block();
 
+        OrganisationDto organisationDto = webClient.get()
+                .uri("http://localhost:9090/api/organisation/get/"
+                + employee.getOrganisationCode())
+                .retrieve()
+                .bodyToMono(OrganisationDto.class)
+                .block();
+
         // REST API Call Using Spring Cloud OpenFeign
         // DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+
+       // REST API Call from Employee Service to Organisation Service Using Spring Cloud OpenFeign
+       // OrganisationDto organisationDto = apiClient.getOrganisation(employee.getOrganisationCode());
 
         // Convert Employee Jpa Entity to EmployeeDto Using ModelMapper
         EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
@@ -87,7 +97,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         APIResponseDto apiResponseDto = new APIResponseDto();
         apiResponseDto.setEmployee(employeeDto);
         apiResponseDto.setDepartment(departmentDto);
-
+        apiResponseDto.setOrganisation(organisationDto);
         return apiResponseDto;
 
         // Convert Employee Jpa Entity to EmployeeDto Using MapStruct
